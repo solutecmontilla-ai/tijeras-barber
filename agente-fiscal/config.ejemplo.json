@@ -1,0 +1,9 @@
+{
+  "servidor": "https://barberia.tudominio.com",
+  "token": "PEGAR_TOKEN_DESDE_ADMIN_>_IMPRESORA_Y_AJUSTES",
+  "puerto": "COM1",
+  "baudios": 9600,
+  "paridad": "even",
+  "intervaloMs": 3000,
+  "s1NumeroFactura": [21, 8]
+}
