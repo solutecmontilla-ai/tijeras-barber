@@ -137,10 +137,16 @@ function open(): DatabaseSync {
 
   const { n } = db.prepare("SELECT count(*) AS n FROM servicios").get() as { n: number };
   if (n === 0) {
-    const s = db.prepare("INSERT INTO servicios (nombre, precio) VALUES (?, ?)");
-    s.run("Corte de cabello", 10_00);
-    s.run("Barba", 6_00);
-    s.run("Cejas", 3_00);
+    // Lista de precios de Tijeras Barber Shop (Ref. = USD)
+    const s = db.prepare("INSERT INTO servicios (nombre, precio, activo) VALUES (?, ?, ?)");
+    s.run("Corte", 12_00, 1);
+    s.run("Barba", 12_00, 1);
+    s.run("Corte + barba", 18_00, 1);
+    s.run("Limpieza facial", 21_00, 1);
+    s.run("Cirugía capilar", 0, 0); // precio por definir: el admin lo activa al fijarlo
+    s.run("Masaje capilar", 2_00, 1);
+    s.run("Lavado capilar", 3_00, 1);
+    s.run("Cera depiladora", 3_00, 1);
   }
   return db;
 }

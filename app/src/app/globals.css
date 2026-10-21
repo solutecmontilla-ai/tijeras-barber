@@ -2,20 +2,21 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
-  --color-oro: #d4a24c;
+  --color-oro: #e0353d; /* rojo del logo (nombre historico) */
+  --color-azul: #2f5fb3;
 }
 
 @utility btn {
   @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-semibold transition disabled:pointer-events-none disabled:opacity-40;
 }
 @utility btn-oro {
-  @apply btn bg-oro text-stone-950 hover:brightness-110 active:scale-[0.98];
+  @apply btn bg-oro text-white hover:brightness-110 active:scale-[0.98];
 }
 @utility btn-gris {
   @apply btn bg-stone-800 text-stone-100 hover:bg-stone-700;
 }
 @utility btn-rojo {
-  @apply btn bg-red-700 text-white hover:bg-red-600;
+  @apply btn border border-red-800 bg-transparent text-red-300 hover:bg-red-950;
 }
 @utility campo {
   @apply w-full rounded-xl border border-stone-700 bg-stone-900 px-4 py-2.5 text-stone-100 outline-none placeholder:text-stone-500 focus:border-oro;

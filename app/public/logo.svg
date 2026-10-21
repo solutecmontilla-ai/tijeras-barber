@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Tijeras Barber Shop">
+  <circle cx="100" cy="92" r="84" fill="#fff"/>
+  <!-- aro tricolor de barberia -->
+  <path d="M30 92a70 70 0 0 1 140 0" fill="none" stroke="#2f5fb3" stroke-width="14"/>
+  <path d="M30 92a70 70 0 0 0 49 66.8" fill="none" stroke="#e0353d" stroke-width="14"/>
+  <path d="M170 92a70 70 0 0 1-49 66.8" fill="none" stroke="#e0353d" stroke-width="14"/>
+  <circle cx="100" cy="92" r="58" fill="#111"/>
+  <!-- tijeras cruzadas -->
+  <g fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round">
+    <circle cx="72" cy="122" r="11"/>
+    <circle cx="128" cy="122" r="11"/>
+    <path d="M80 114 132 54M120 114 68 54"/>
+  </g>
+  <circle cx="100" cy="84" r="4" fill="#fff"/>
+  <!-- cinta -->
+  <path d="M18 146h164l-10 14 10 14H18l10-14z" fill="#111" stroke="#fff" stroke-width="3"/>
+  <text x="100" y="168" text-anchor="middle" font-family="Georgia,serif" font-size="22" font-weight="700" letter-spacing="4" fill="#fff">TIJERAS</text>
+  <rect x="52" y="180" width="96" height="18" rx="3" fill="#fff"/>
+  <text x="100" y="193" text-anchor="middle" font-family="Arial,sans-serif" font-size="11" font-weight="700" letter-spacing="3" fill="#111">BARBER SHOP</text>
+</svg>

@@ -8,8 +8,9 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Tijeras Barbershop",
-  description: "Gestion de cubiculos, servicios y facturacion fiscal",
+  title: "Tijeras Barber Shop",
+  description: "¡Tu escape, tu momento!",
+  icons: { icon: "/logo.svg" },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0c0a09" };

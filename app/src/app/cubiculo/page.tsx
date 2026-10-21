@@ -110,6 +110,8 @@ export default function Cubiculo() {
   if (!estado) {
     return (
       <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-5 p-6">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.svg" alt="Tijeras Barber Shop" className="mx-auto h-28 w-28" />
         <h1 className="text-center text-2xl font-bold">Número de cubículo</h1>
         <div className="campo text-center text-5xl font-bold tracking-widest h-20 flex items-center justify-center">
           {numero || <span className="text-stone-600">—</span>}
@@ -263,7 +265,7 @@ export default function Cubiculo() {
               return (
                 <button
                   key={s.id}
-                  className={`btn min-h-20 text-lg ${on ? "bg-oro text-stone-950" : "bg-stone-800 hover:bg-stone-700"}`}
+                  className={`btn min-h-20 text-lg ${on ? "bg-oro text-white" : "bg-stone-800 hover:bg-stone-700"}`}
                   onClick={() => setElegidos(on ? elegidos.filter((x) => x !== s.id) : [...elegidos, s.id])}
                 >
                   {s.nombre}

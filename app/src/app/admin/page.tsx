@@ -35,7 +35,9 @@ export default function Admin() {
   if (!sesion) {
     return (
       <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-4 p-6">
-        <h1 className="text-2xl font-bold">Administración</h1>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/logo.svg" alt="Tijeras Barber Shop" className="mx-auto h-28 w-28" />
+        <h1 className="text-center text-2xl font-bold">Administración</h1>
         <form
           className="grid gap-3"
           onSubmit={async (e) => {
@@ -67,13 +69,17 @@ export default function Admin() {
   return (
     <div className="flex flex-1 flex-col">
       <header className="flex flex-wrap items-center gap-2 border-b border-stone-800 px-4 py-3">
-        <span className="mr-4 font-bold">✂️ Tijeras · Admin</span>
+        <span className="mr-4 flex items-center gap-2 font-bold">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.svg" alt="" className="h-8 w-8" />
+          Tijeras · Admin
+        </span>
         <nav className="flex flex-wrap gap-1">
           {(Object.keys(PESTANAS) as Pestana[]).map((k) => (
             <button
               key={k}
               onClick={() => setTab(k)}
-              className={`btn px-3 py-1.5 text-sm ${tab === k ? "bg-oro text-stone-950" : "text-stone-300 hover:bg-stone-800"}`}
+              className={`btn px-3 py-1.5 text-sm ${tab === k ? "bg-oro text-white" : "text-stone-300 hover:bg-stone-800"}`}
             >
               {PESTANAS[k]}
             </button>
