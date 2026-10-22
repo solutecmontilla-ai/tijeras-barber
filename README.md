@@ -53,6 +53,17 @@ Por defecto el modo fiscal es **simulador**: las facturas se marcan como impresa
 4. Variables: `ADMIN_PASSWORD` (obligatoria para crear la base en producción; luego se cambia desde el panel) y `COOKIE_SECURE=true` cuando el dominio tenga HTTPS.
 5. Asignar dominio con HTTPS.
 
+### Cambiar o restablecer la clave del admin
+
+- **Sabiendo la clave actual:** *Admin → Impresora y ajustes → Nueva clave de administrador → Guardar ajustes*.
+- **Sin la clave actual:** en Coolify, *Terminal* del contenedor de la app, cambiar `MiClaveNueva123` y ejecutar:
+
+  ```sh
+  node -e "const{DatabaseSync}=require('node:sqlite');const c=require('node:crypto');const s=c.randomBytes(16).toString('hex');const r=new DatabaseSync('/data/barberia.db').prepare(\"UPDATE config SET valor=? WHERE clave='admin_password'\").run(s+':'+c.scryptSync(process.argv[1],s,32).toString('hex'));console.log(r.changes?'Clave cambiada':'No se encontro')" 'MiClaveNueva123'
+  ```
+
+  Solo toca la clave; no requiere reiniciar. Cambiar `ADMIN_PASSWORD` en Coolify **no** cambia la clave de una base ya creada (conviene actualizarla igual para que coincidan).
+
 ## Agente fiscal (PC de caja, Windows)
 
 ```bash
