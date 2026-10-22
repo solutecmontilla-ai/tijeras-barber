@@ -111,7 +111,7 @@ export default function Cubiculo() {
     return (
       <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-5 p-6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.svg" alt="Tijeras Barber Shop" className="mx-auto h-36 w-auto" />
+        <img src="/logo-tijeras.svg" alt="Tijeras Barber Shop" className="mx-auto h-36 w-auto" />
         <h1 className="text-center text-2xl font-bold">Número de cubículo</h1>
         <div className="campo text-center text-5xl font-bold tracking-widest h-20 flex items-center justify-center">
           {numero || <span className="text-stone-600">—</span>}

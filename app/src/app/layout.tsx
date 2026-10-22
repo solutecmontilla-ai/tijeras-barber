@@ -10,7 +10,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "Tijeras Barber Shop",
   description: "¡Tu escape, tu momento!",
-  icons: { icon: "/icono.svg" },
+  icons: { icon: "/icono-tijeras.svg" },
 };
 
 export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#ffffff" };
