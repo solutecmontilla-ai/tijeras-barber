@@ -104,7 +104,7 @@ function Tasa({ actual, onCambio }: { actual: { tasa: number; actualizada: strin
   const sinTasa = !(actual.tasa > 0);
 
   return (
-    <div className={`tarjeta flex flex-wrap items-center gap-4 p-4 ${sinTasa ? "border-red-700" : ""}`}>
+    <div className={`tarjeta flex flex-wrap items-center gap-4 p-4 ${sinTasa ? "border-red-300" : ""}`}>
       <div>
         <div className="etiqueta">Tasa del día (Bs por $)</div>
         <div className="text-2xl font-bold tabular-nums text-oro">
@@ -144,7 +144,7 @@ function Tasa({ actual, onCambio }: { actual: { tasa: number; actualizada: strin
           Cambiar tasa
         </button>
       )}
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
     </div>
   );
 }
@@ -323,7 +323,7 @@ function Facturar({ id, tasa, onListo }: { id: number; tasa: number; onListo: ()
         </div>
       </div>
 
-      {error && <p className="rounded-xl bg-red-950 px-4 py-3 text-red-200">{error}</p>}
+      {error && <p className="rounded-xl bg-red-50 px-4 py-3 text-red-800">{error}</p>}
       <div className="flex flex-wrap gap-3">
         <button
           className="btn-oro flex-1 py-4 text-lg"

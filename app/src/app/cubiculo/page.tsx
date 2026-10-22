@@ -89,7 +89,7 @@ export default function Cubiculo() {
 
   if (cargando) return <main className="flex flex-1 items-center justify-center text-stone-500">Cargando…</main>;
 
-  const aviso = error && <p className="rounded-xl bg-red-950 px-4 py-3 text-red-200">{error}</p>;
+  const aviso = error && <p className="rounded-xl bg-red-50 px-4 py-3 text-red-800">{error}</p>;
 
   if (!autorizado) {
     return (

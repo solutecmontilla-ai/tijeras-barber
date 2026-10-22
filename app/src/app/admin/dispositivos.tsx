@@ -26,7 +26,7 @@ export function Dispositivos() {
           tablet de la barbería, inicie sesión como admin y autorícela. Luego cierre la sesión de admin.
         </p>
         {datos.actual ? (
-          <p className="rounded-xl bg-emerald-950 px-4 py-3 text-emerald-200">Este navegador ya está autorizado.</p>
+          <p className="rounded-xl bg-emerald-50 px-4 py-3 text-emerald-800">Este navegador ya está autorizado.</p>
         ) : (
           <form
             className="flex gap-2"
@@ -51,7 +51,7 @@ export function Dispositivos() {
             <button className="btn-oro">Autorizar</button>
           </form>
         )}
-        {error && <p className="text-sm text-red-400">{error}</p>}
+        {error && <p className="text-sm text-red-600">{error}</p>}
       </section>
 
       <section className="tarjeta space-y-3">

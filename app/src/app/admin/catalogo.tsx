@@ -68,7 +68,7 @@ function Cubiculos() {
           </button>
         )}
       </form>
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
       <ul className="divide-y divide-stone-800">
         {lista.map((c) => (
           <li key={c.id} className={`flex items-center gap-3 py-2 ${c.activo ? "" : "opacity-40"}`}>
@@ -142,7 +142,7 @@ function Servicios() {
         <button className="btn-oro">{form.id ? "Guardar" : "Agregar"}</button>
       </form>
       <p className="text-xs text-stone-500">Precio en dólares con IVA incluido. Se factura en bolívares a la tasa del día.</p>
-      {error && <p className="text-sm text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-600">{error}</p>}
       <ul className="divide-y divide-stone-800">
         {lista.map((s) => (
           <li key={s.id} className={`flex flex-wrap items-center gap-3 py-2 ${s.activo ? "" : "opacity-40"}`}>

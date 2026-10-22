@@ -18,7 +18,7 @@ type Factura = {
   apellido: string;
 };
 
-const COLOR_ESTADO = { pendiente: "text-amber-400", impresa: "text-emerald-400", error: "text-red-400" };
+const COLOR_ESTADO = { pendiente: "text-amber-600", impresa: "text-emerald-600", error: "text-red-600" };
 
 export function Facturas() {
   const [lista, setLista] = useState<Factura[]>([]);
@@ -59,7 +59,7 @@ export function Facturas() {
               <td className="p-3">{f.numero_fiscal ?? "—"}</td>
               <td className={`p-3 ${COLOR_ESTADO[f.estado]}`}>
                 {f.estado}
-                {f.error && <div className="text-xs text-red-300">{f.error}</div>}
+                {f.error && <div className="text-xs text-red-700">{f.error}</div>}
                 {f.estado === "error" && (
                   <button
                     className="btn-gris mt-1 px-2 py-1 text-xs"
