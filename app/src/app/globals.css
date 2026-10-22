@@ -2,8 +2,23 @@
 
 @theme inline {
   --font-sans: var(--font-geist-sans);
-  --color-oro: #e0353d; /* rojo del logo (nombre historico) */
-  --color-azul: #2f5fb3;
+  --color-oro: #f43745; /* rojo del logo (nombre historico) */
+  --color-azul: #0652c1;
+}
+
+/* Paleta del logo: la escala "stone" se reemplaza por el azul marino de la marca (#0E1A28 / #0B131E) */
+@theme {
+  --color-stone-50: #f6f8fa;
+  --color-stone-100: #f2f2f2;
+  --color-stone-200: #d7dee7;
+  --color-stone-300: #b8c4d2;
+  --color-stone-400: #8e9fb3;
+  --color-stone-500: #64788f;
+  --color-stone-600: #42566e;
+  --color-stone-700: #2a3c52;
+  --color-stone-800: #1a2a3d;
+  --color-stone-900: #0e1a28;
+  --color-stone-950: #0b131e;
 }
 
 @utility btn {

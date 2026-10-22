@@ -36,7 +36,7 @@ export default function Admin() {
     return (
       <main className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-4 p-6">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src="/logo.svg" alt="Tijeras Barber Shop" className="mx-auto h-28 w-28" />
+        <img src="/logo.svg" alt="Tijeras Barber Shop" className="mx-auto h-36 w-auto" />
         <h1 className="text-center text-2xl font-bold">Administración</h1>
         <form
           className="grid gap-3"
@@ -71,7 +71,7 @@ export default function Admin() {
       <header className="flex flex-wrap items-center gap-2 border-b border-stone-800 px-4 py-3">
         <span className="mr-4 flex items-center gap-2 font-bold">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/logo.svg" alt="" className="h-8 w-8" />
+          <img src="/icono.svg" alt="" className="h-8 w-8" />
           Tijeras · Admin
         </span>
         <nav className="flex flex-wrap gap-1">

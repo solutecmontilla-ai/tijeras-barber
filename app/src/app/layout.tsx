@@ -10,10 +10,10 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "Tijeras Barber Shop",
   description: "¡Tu escape, tu momento!",
-  icons: { icon: "/logo.svg" },
+  icons: { icon: "/icono.svg" },
 };
 
-export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0c0a09" };
+export const viewport: Viewport = { width: "device-width", initialScale: 1, themeColor: "#0b131e" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
