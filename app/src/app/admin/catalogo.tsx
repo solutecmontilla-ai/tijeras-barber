@@ -71,9 +71,9 @@ function Cubiculos() {
       {error && <p className="text-sm text-red-600">{error}</p>}
       <ul className="divide-y divide-stone-800">
         {lista.map((c) => (
-          <li key={c.id} className={`flex items-center gap-3 py-2 ${c.activo ? "" : "opacity-40"}`}>
-            <span className="w-12 text-2xl font-bold text-oro">{c.numero}</span>
-            <span className="flex-1">{c.barbero}</span>
+          <li key={c.id} className="flex flex-wrap items-center gap-3 py-2">
+            <span className={`w-12 text-2xl font-bold text-oro ${c.activo ? "" : "opacity-40"}`}>{c.numero}</span>
+            <span className={`flex-1 ${c.activo ? "" : "opacity-40"}`}>{c.barbero}</span>
             <button
               className="btn-gris px-3 py-1 text-sm"
               onClick={() => setForm({ id: c.id, numero: String(c.numero), barbero: c.barbero, activo: !!c.activo })}
@@ -88,6 +88,21 @@ function Cubiculos() {
               }}
             >
               {c.activo ? "Desactivar" : "Activar"}
+            </button>
+            <button
+              className="btn-rojo px-3 py-1 text-sm"
+              onClick={async () => {
+                if (!window.confirm(`¿Eliminar $el cubículo ${c.numero} (${c.barbero})?`)) return;
+                setError("");
+                try {
+                  await api("/api/admin/cubiculos", { eliminar: c.id });
+                  cargar();
+                } catch (err) {
+                  setError((err as Error).message);
+                }
+              }}
+            >
+              Eliminar
             </button>
           </li>
         ))}
@@ -145,8 +160,8 @@ function Servicios() {
       {error && <p className="text-sm text-red-600">{error}</p>}
       <ul className="divide-y divide-stone-800">
         {lista.map((s) => (
-          <li key={s.id} className={`flex flex-wrap items-center gap-3 py-2 ${s.activo ? "" : "opacity-40"}`}>
-            <span className="flex-1">{s.nombre}</span>
+          <li key={s.id} className="flex flex-wrap items-center gap-3 py-2">
+            <span className={`flex-1 ${s.activo ? "" : "opacity-40"}`}>{s.nombre}</span>
             <span className="text-xs text-stone-400">{ALICUOTAS[s.alicuota]}</span>
             <span className="w-28 text-right tabular-nums">{usd(s.precio)}</span>
             <button
@@ -165,6 +180,21 @@ function Servicios() {
               }}
             >
               {s.activo ? "Desactivar" : "Activar"}
+            </button>
+            <button
+              className="btn-rojo px-3 py-1 text-sm"
+              onClick={async () => {
+                if (!window.confirm(`¿Eliminar $"${s.nombre}"?`)) return;
+                setError("");
+                try {
+                  await api("/api/admin/servicios", { eliminar: s.id });
+                  cargar();
+                } catch (err) {
+                  setError((err as Error).message);
+                }
+              }}
+            >
+              Eliminar
             </button>
           </li>
         ))}

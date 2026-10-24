@@ -31,9 +31,11 @@ export const POST = soloBarbero(async (req, { session }) => {
       cliente = { id: Number(r.lastInsertRowid) } as NonNullable<typeof cliente>;
     }
 
-    const { barbero } = db.prepare("SELECT barbero FROM cubiculos WHERE id = ?").get(session.cubiculoId) as {
-      barbero: string;
-    };
+    const cub = db.prepare("SELECT barbero FROM cubiculos WHERE id = ? AND activo = 1").get(session.cubiculoId) as
+      | { barbero: string }
+      | undefined;
+    if (!cub) throw new HttpError(403, "Este cubiculo fue desactivado o eliminado");
+    const { barbero } = cub;
     const r = db
       .prepare(
         "INSERT INTO atenciones (cliente_id, cubiculo_id, barbero, inicio) VALUES (?, ?, ?, strftime('%Y-%m-%d %H:%M:%S', 'now'))",
