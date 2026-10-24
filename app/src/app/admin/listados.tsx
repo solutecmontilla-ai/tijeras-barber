@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { diasParaCumple } from "@/lib/fechas";
 import { api, dinero, fechaLocal, usd } from "@/lib/http";
 
 type Factura = {
@@ -97,10 +98,12 @@ type Cliente = {
 export function Clientes() {
   const [q, setQ] = useState("");
   const [lista, setLista] = useState<Cliente[]>([]);
+  const [editando, setEditando] = useState<number | null>(null);
+  const buscar = useCallback(() => api<Cliente[]>(`/api/admin/clientes?q=${encodeURIComponent(q)}`).then(setLista), [q]);
   useEffect(() => {
-    const t = setTimeout(() => api<Cliente[]>(`/api/admin/clientes?q=${encodeURIComponent(q)}`).then(setLista), 250);
+    const t = setTimeout(buscar, 250);
     return () => clearTimeout(t);
-  }, [q]);
+  }, [buscar]);
 
   return (
     <div className="space-y-4">
@@ -115,24 +118,89 @@ export function Clientes() {
               <th className="p-3">Nacimiento</th>
               <th className="p-3">Última visita</th>
               <th className="p-3 text-right">Visitas</th>
+              <th className="p-3"></th>
             </tr>
           </thead>
           <tbody>
-            {lista.map((c) => (
-              <tr key={c.id} className="border-b border-stone-800/60">
-                <td className="p-3">{c.cedula}</td>
-                <td className="p-3">
-                  {c.nombre} {c.apellido}
-                </td>
-                <td className="p-3">{c.telefono ?? "—"}</td>
-                <td className="p-3">{c.fecha_nacimiento?.split("-").reverse().join("/") ?? "—"}</td>
-                <td className="p-3">{fechaLocal(c.ultima_visita, false)}</td>
-                <td className="p-3 text-right">{c.visitas}</td>
-              </tr>
-            ))}
+            {lista.map((c) =>
+              editando === c.id ? (
+                <EditarCliente
+                  key={c.id}
+                  c={c}
+                  onCerrar={(cambio) => {
+                    setEditando(null);
+                    if (cambio) buscar();
+                  }}
+                />
+              ) : (
+                <tr key={c.id} className="border-b border-stone-800/60">
+                  <td className="p-3">{c.cedula}</td>
+                  <td className="p-3">
+                    {c.nombre} {c.apellido} {diasParaCumple(c.fecha_nacimiento) === 0 && <span title="Hoy cumple años">🎂</span>}
+                  </td>
+                  <td className="p-3">{c.telefono ?? "—"}</td>
+                  <td className="p-3">{c.fecha_nacimiento?.split("-").reverse().join("/") ?? "—"}</td>
+                  <td className="p-3">{fechaLocal(c.ultima_visita, false)}</td>
+                  <td className="p-3 text-right">{c.visitas}</td>
+                  <td className="p-3 text-right">
+                    <button className="btn-gris px-3 py-1 text-xs" onClick={() => setEditando(c.id)}>
+                      Editar
+                    </button>
+                  </td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
       </div>
     </div>
+  );
+}
+
+function EditarCliente({ c, onCerrar }: { c: Cliente; onCerrar: (cambio: boolean) => void }) {
+  const [form, setForm] = useState({
+    cedula: c.cedula,
+    nombre: c.nombre,
+    apellido: c.apellido,
+    telefono: c.telefono ?? "",
+    fechaNacimiento: c.fecha_nacimiento ?? "",
+  });
+  const [error, setError] = useState("");
+  const campo = (k: keyof typeof form) => ({
+    value: form[k],
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => setForm({ ...form, [k]: e.target.value }),
+  });
+
+  return (
+    <tr className="border-b border-stone-800/60 bg-stone-900">
+      <td colSpan={7} className="p-3">
+        <form
+          className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6"
+          onSubmit={async (e) => {
+            e.preventDefault();
+            setError("");
+            try {
+              await api("/api/admin/clientes", { id: c.id, ...form });
+              onCerrar(true);
+            } catch (err) {
+              setError((err as Error).message);
+            }
+          }}
+        >
+          <input className="campo" placeholder="Cédula" {...campo("cedula")} />
+          <input className="campo" placeholder="Nombre" {...campo("nombre")} />
+          <input className="campo" placeholder="Apellido" {...campo("apellido")} />
+          <input className="campo" placeholder="Teléfono" inputMode="tel" {...campo("telefono")} />
+          <input className="campo" type="date" {...campo("fechaNacimiento")} />
+          <div className="flex gap-2">
+            <button className="btn-oro flex-1">Guardar</button>
+            <button type="button" className="btn-gris" onClick={() => onCerrar(false)}>
+              ✕
+            </button>
+          </div>
+        </form>
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      </td>
+    </tr>
   );
 }

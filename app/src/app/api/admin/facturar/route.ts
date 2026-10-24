@@ -1,13 +1,10 @@
-import { body, HttpError, soloAdmin, texto } from "@/lib/api";
+import { body, HttpError, soloAdmin } from "@/lib/api";
+import { actualizarCliente, type DatosCliente } from "@/lib/consultas";
 import { db, getConfig, tx } from "@/lib/db";
 import { comandosFactura, encolar, METODOS_PAGO, type MetodoPago } from "@/lib/fiscal";
 
-type Entrada = {
+type Entrada = Omit<DatosCliente, "cedula"> & {
   atencionId: number;
-  nombre: unknown;
-  apellido: unknown;
-  telefono?: unknown;
-  fechaNacimiento?: unknown;
   metodoPago: unknown;
   tasa: unknown; // la que vio el admin en pantalla; debe coincidir con la vigente
   items: { servicioId: number; cantidad: number }[];
@@ -17,12 +14,6 @@ export const POST = soloAdmin(async (req) => {
   const b = await body<Entrada>(req);
   const metodo = String(b.metodoPago) as MetodoPago;
   if (!(metodo in METODOS_PAGO)) throw new HttpError(400, "Metodo de pago invalido");
-
-  const telefono = typeof b.telefono === "string" ? b.telefono.trim().slice(0, 20) || null : null;
-  const fechaNac =
-    typeof b.fechaNacimiento === "string" && /^\d{4}-\d{2}-\d{2}$/.test(b.fechaNacimiento) ? b.fechaNacimiento : null;
-  const nombre = texto(b.nombre, "nombre", 40);
-  const apellido = texto(b.apellido, "apellido", 40);
 
   // El admin puede ajustar servicios y cantidades antes de facturar
   const items = (Array.isArray(b.items) ? b.items : []).map((it) => {
@@ -49,9 +40,7 @@ export const POST = soloAdmin(async (req) => {
     if (a.estado === "facturada") throw new HttpError(409, "Esta atencion ya fue facturada");
     if (a.estado === "anulada") throw new HttpError(409, "Esta atencion fue anulada");
 
-    db.prepare(
-      "UPDATE clientes SET nombre = ?, apellido = ?, telefono = ?, fecha_nacimiento = ? WHERE id = ?",
-    ).run(nombre, apellido, telefono, fechaNac, a.cliente_id);
+    const { nombre, apellido, telefono } = actualizarCliente(a.cliente_id, { ...b, cedula: undefined });
 
     db.prepare("DELETE FROM atencion_items WHERE atencion_id = ?").run(a.id);
     const ins = db.prepare(

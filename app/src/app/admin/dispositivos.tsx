@@ -59,8 +59,8 @@ export function Dispositivos() {
         {datos.lista.length === 0 && <p className="text-sm text-stone-500">Ninguno autorizado todavía.</p>}
         <ul className="divide-y divide-stone-800">
           {datos.lista.map((d) => (
-            <li key={d.id} className={`flex flex-wrap items-center gap-3 py-2 ${d.activo ? "" : "opacity-40"}`}>
-              <div className="flex-1">
+            <li key={d.id} className="flex flex-wrap items-center gap-3 py-2">
+              <div className={`flex-1 ${d.activo ? "" : "opacity-40"}`}>
                 <div>
                   {d.nombre} {d.id === datos.actual && <span className="text-xs text-oro">(este)</span>}
                 </div>
@@ -80,6 +80,16 @@ export function Dispositivos() {
               ) : (
                 <span className="text-xs text-stone-500">revocado</span>
               )}
+              <button
+                className="btn-gris px-3 py-1 text-sm"
+                onClick={async () => {
+                  if (!window.confirm(`¿Eliminar "${d.nombre}" de la lista? Si sigue en uso, dejará de funcionar.`)) return;
+                  await api("/api/admin/dispositivos", { accion: "eliminar", id: d.id });
+                  cargar();
+                }}
+              >
+                Eliminar
+              </button>
             </li>
           ))}
         </ul>

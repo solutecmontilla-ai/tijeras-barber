@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { api } from "@/lib/http";
 import { Caja } from "./caja";
 import { Catalogo } from "./catalogo";
+import { Cumpleanos } from "./cumpleanos";
 import { Clientes, Facturas } from "./listados";
 import { Ajustes } from "./ajustes";
 import { Dispositivos } from "./dispositivos";
@@ -96,6 +97,7 @@ export default function Admin() {
         </button>
       </header>
       <main className="flex-1 p-4 md:p-6">
+        <Cumpleanos />
         {tab === "caja" && <Caja />}
         {tab === "facturas" && <Facturas />}
         {tab === "clientes" && <Clientes />}

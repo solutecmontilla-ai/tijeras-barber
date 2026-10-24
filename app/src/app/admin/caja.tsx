@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { diasParaCumple } from "@/lib/fechas";
 import { aBs, api, dinero, duracion, fechaLocal, usd } from "@/lib/http";
 
 type EnCola = {
@@ -18,7 +19,7 @@ type EnCola = {
 };
 type Item = { servicio_id: number | null; nombre: string; precio: number; alicuota: string; cantidad: number };
 type Detalle = {
-  atencion: { id: number; estado: string; barbero: string; cubiculo: number; inicio: string; fin: string | null; duracionSeg: number; items: Item[] };
+  atencion: { id: number; cliente_id: number; estado: string; barbero: string; cubiculo: number; inicio: string; fin: string | null; duracionSeg: number; items: Item[] };
   cliente: { cedula: string; nombre: string; apellido: string; telefono: string | null; fecha_nacimiento: string | null };
   historial: { id: number; barbero: string; inicio: string; duracionSeg: number; items: Item[] }[];
 };
@@ -178,6 +179,7 @@ function Facturar({ id, tasa, onListo }: { id: number; tasa: number; onListo: ()
   const [items, setItems] = useState<{ servicioId: number; cantidad: number }[]>([]);
   const [error, setError] = useState("");
   const [enviando, setEnviando] = useState(false);
+  const [guardado, setGuardado] = useState(false);
   const [resultado, setResultado] = useState<{ estado: string; numero_fiscal: string | null } | null>(null);
 
   useEffect(() => {
@@ -204,7 +206,10 @@ function Facturar({ id, tasa, onListo }: { id: number; tasa: number; onListo: ()
   const totalBs = items.reduce((t, i) => t + aBs(precio(i.servicioId), tasa) * i.cantidad, 0);
   const campo = (k: keyof typeof form) => ({
     value: form[k],
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => setForm({ ...form, [k]: e.target.value }),
+    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+      setForm({ ...form, [k]: e.target.value });
+      setGuardado(false);
+    },
   });
 
   if (resultado) {
@@ -232,6 +237,11 @@ function Facturar({ id, tasa, onListo }: { id: number; tasa: number; onListo: ()
           <div className="text-xl font-bold">
             {d.cliente.nombre} {d.cliente.apellido}
           </div>
+          {diasParaCumple(form.fechaNacimiento) === 0 && (
+            <div className="mt-1 inline-block rounded-lg bg-red-50 px-2 py-1 text-sm font-semibold text-oro">
+              🎂 ¡Hoy cumple años!
+            </div>
+          )}
         </div>
         <div className="text-right text-sm text-stone-400">
           Cub. {d.atencion.cubiculo} · {d.atencion.barbero}
@@ -258,6 +268,30 @@ function Facturar({ id, tasa, onListo }: { id: number; tasa: number; onListo: ()
           <span className="etiqueta">Fecha de nacimiento</span>
           <input className="campo" type="date" {...campo("fechaNacimiento")} />
         </label>
+        <div className="flex items-center gap-3 sm:col-span-2">
+          <button
+            className="btn-gris"
+            disabled={enviando}
+            onClick={async () => {
+              setError("");
+              setGuardado(false);
+              setEnviando(true);
+              try {
+                const { nombre, apellido, telefono, fechaNacimiento } = form;
+                await api("/api/admin/clientes", { id: d.atencion.cliente_id, nombre, apellido, telefono, fechaNacimiento });
+                setD({ ...d, cliente: { ...d.cliente, nombre, apellido } });
+                setGuardado(true);
+              } catch (e) {
+                setError((e as Error).message);
+              } finally {
+                setEnviando(false);
+              }
+            }}
+          >
+            Guardar cliente
+          </button>
+          {guardado && <span className="text-sm text-emerald-600">✓ Datos guardados</span>}
+        </div>
       </div>
 
       <div>

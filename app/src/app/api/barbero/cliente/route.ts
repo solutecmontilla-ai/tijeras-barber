@@ -1,5 +1,6 @@
 import { body, normalizarCedula, soloBarbero } from "@/lib/api";
 import { clientePorCedula, visitas } from "@/lib/consultas";
+import { diasParaCumple } from "@/lib/fechas";
 
 export const POST = soloBarbero(async (req) => {
   const { cedula } = await body<{ cedula: unknown }>(req);
@@ -10,6 +11,7 @@ export const POST = soloBarbero(async (req) => {
   return {
     cedula: ced,
     cliente: { nombre: c.nombre, apellido: c.apellido },
+    cumpleHoy: diasParaCumple(c.fecha_nacimiento) === 0,
     ultimaVisita: ultima
       ? { fecha: ultima.inicio.slice(0, 10), barbero: ultima.barbero, servicios: ultima.items.map((i) => i.nombre) }
       : null,

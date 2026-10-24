@@ -1,5 +1,7 @@
 import "server-only";
+import { HttpError, normalizarCedula, texto } from "./api";
 import { db } from "./db";
+import { diasParaCumple } from "./fechas";
 
 export type Cliente = {
   id: number;
@@ -14,6 +16,40 @@ export type Item = { servicio_id: number | null; nombre: string; precio: number;
 
 export function clientePorCedula(cedula: string): Cliente | undefined {
   return db.prepare("SELECT * FROM clientes WHERE cedula = ?").get(cedula) as Cliente | undefined;
+}
+
+export type DatosCliente = { cedula?: unknown; nombre: unknown; apellido: unknown; telefono?: unknown; fechaNacimiento?: unknown };
+
+// Edicion de datos del cliente (caja y listado). La cedula solo cambia si se envia.
+export function actualizarCliente(id: number, b: DatosCliente) {
+  const nombre = texto(b.nombre, "nombre", 40);
+  const apellido = texto(b.apellido, "apellido", 40);
+  const telefono = typeof b.telefono === "string" ? b.telefono.trim().slice(0, 20) || null : null;
+  const fechaNac =
+    typeof b.fechaNacimiento === "string" && /^\d{4}-\d{2}-\d{2}$/.test(b.fechaNacimiento) ? b.fechaNacimiento : null;
+  const cedula = b.cedula === undefined ? null : normalizarCedula(b.cedula);
+  if (cedula) {
+    const otro = clientePorCedula(cedula);
+    if (otro && otro.id !== id) throw new HttpError(409, "Ya existe otro cliente con esa cedula");
+  }
+  const r = db
+    .prepare(
+      "UPDATE clientes SET cedula = coalesce(?, cedula), nombre = ?, apellido = ?, telefono = ?, fecha_nacimiento = ? WHERE id = ?",
+    )
+    .run(cedula, nombre, apellido, telefono, fechaNac, id);
+  if (r.changes === 0) throw new HttpError(404, "Cliente no encontrado");
+  return { nombre, apellido, telefono };
+}
+
+// Clientes que cumplen años hoy (dias = 0) o en los proximos dias
+export function cumpleanos(dias = 7) {
+  const rows = db
+    .prepare("SELECT id, cedula, nombre, apellido, telefono, fecha_nacimiento FROM clientes WHERE fecha_nacimiento IS NOT NULL")
+    .all() as Cliente[];
+  return rows
+    .map((c) => ({ ...c, dias: diasParaCumple(c.fecha_nacimiento) ?? Infinity }))
+    .filter((c) => c.dias <= dias)
+    .sort((a, b) => a.dias - b.dias);
 }
 
 export function itemsDe(atencionId: number): Item[] {

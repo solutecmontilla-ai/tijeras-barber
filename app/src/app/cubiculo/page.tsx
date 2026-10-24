@@ -11,6 +11,7 @@ type Estado = {
 type Busqueda = {
   cedula: string;
   cliente: { nombre: string; apellido: string } | null;
+  cumpleHoy?: boolean;
   ultimaVisita?: { fecha: string; barbero: string; servicios: string[] } | null;
 };
 
@@ -231,6 +232,7 @@ export default function Cubiculo() {
             <div className="text-2xl font-bold">
               {nuevo ? "Cliente nuevo" : `${busqueda.cliente!.nombre} ${busqueda.cliente!.apellido}`}
             </div>
+            {busqueda.cumpleHoy && <div className="mt-1 text-lg font-semibold text-oro">🎂 ¡Hoy cumple años!</div>}
           </div>
           <button className="btn-gris text-sm" onClick={reiniciar}>
             Cambiar

@@ -12,6 +12,7 @@ export const GET = soloAdmin(async () => {
 
 // accion "autorizar": registra el navegador desde el que el admin hace la solicitud
 // accion "revocar": desactiva un dispositivo; sus barberos quedan fuera de inmediato
+// accion "eliminar": lo borra de la lista (tambien deja de funcionar si seguia activo)
 export const POST = soloAdmin(async (req) => {
   const b = await body<{ accion: string; nombre?: unknown; id?: number }>(req);
   if (b.accion === "autorizar") {
@@ -20,6 +21,11 @@ export const POST = soloAdmin(async (req) => {
   }
   if (b.accion === "revocar") {
     const r = db.prepare("UPDATE dispositivos SET activo = 0 WHERE id = ?").run(Number(b.id));
+    if (r.changes === 0) throw new HttpError(404, "Dispositivo no encontrado");
+    return { ok: true };
+  }
+  if (b.accion === "eliminar") {
+    const r = db.prepare("DELETE FROM dispositivos WHERE id = ?").run(Number(b.id));
     if (r.changes === 0) throw new HttpError(404, "Dispositivo no encontrado");
     return { ok: true };
   }

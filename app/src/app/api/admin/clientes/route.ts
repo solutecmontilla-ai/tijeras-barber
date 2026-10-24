@@ -1,4 +1,5 @@
-import { soloAdmin } from "@/lib/api";
+import { body, soloAdmin } from "@/lib/api";
+import { actualizarCliente, type DatosCliente } from "@/lib/consultas";
 import { db } from "@/lib/db";
 
 export const GET = soloAdmin((req) => {
@@ -13,4 +14,11 @@ export const GET = soloAdmin((req) => {
        ORDER BY ultima_visita DESC NULLS LAST LIMIT 100`,
     )
     .all(like, like, like);
+});
+
+// Edita los datos del cliente (desde caja o desde el listado de clientes)
+export const POST = soloAdmin(async (req) => {
+  const b = await body<DatosCliente & { id: number }>(req);
+  actualizarCliente(Number(b.id), b);
+  return db.prepare("SELECT * FROM clientes WHERE id = ?").get(Number(b.id));
 });
